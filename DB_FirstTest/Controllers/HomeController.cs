@@ -55,7 +55,18 @@ namespace DB_FirstTest.Controllers
             }
             catch(Exception e)
             {
-                return Json("");
+                return Json(e.Message);
+            }
+        }
+
+        public JsonResult SaveStudent(Student student)
+        {
+            try
+            {
+                return Json(_studentService.SaveStudent(student));
+            }catch(Exception e)
+            {
+                return Json(e.Message);
             }
         }
     }

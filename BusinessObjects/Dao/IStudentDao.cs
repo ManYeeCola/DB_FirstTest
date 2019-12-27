@@ -14,6 +14,7 @@ namespace BusinessObjects.Dao
     public interface IStudentDao
     {
         List<Student> GetStudent();
+        int SaveStudent(Student student);
     }
 
     public class StudentDao: BaseDao<Student>, IStudentDao
@@ -21,9 +22,9 @@ namespace BusinessObjects.Dao
         public StudentDao(AppDbContext db) : base(db) { }
         public List<Student> GetStudent()
         {
-            var jobNumberParam = new SqlParameter("ID", 1);
-            jobNumberParam.DbType = DbType.Int32;
-            string sql = "select * from Student where ID=@ID";
+            //var jobNumberParam = new SqlParameter("ID", 1);
+            //jobNumberParam.DbType = DbType.Int32;
+            //string sql = "select * from Student where ID=@ID";
             //return db.Student.FromSqlRaw(sql, jobNumberParam).ToList();
             //return db.Student.Where(student => student.Id == 1).ToList();
             return db.Student.Where(student => student.Id == 1).Skip(0).Take(10).ToList();

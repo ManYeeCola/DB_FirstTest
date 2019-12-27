@@ -3,21 +3,34 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4"></h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div>
+        <input type="text" autocomplete="no" id="name" />
+        <input type="text" autocomplete="no" id="pwd" />
+        <select asp-items="@Html.GetEnumSelectList(typeof(BusinessObjects.Entity.TestStatus))" id="testProperty"></select>
+        <button onclick="submit()">submit</button>
 </div>
-
+</div>
+<script src="~/js/jquery-1.11.0.js"></script>
 <script>
     window.onload = function () {
-        httpRequest({
-        method: "get",
-        url: "Home/GetStudent",//请求的url地址
-        data: {}
-        }, function (res) {
-            console.log(res);
-        }, function () {
-            console.log("请求失败");
+        $.get("@Url.Action("GetStudent","Home")", function (result) {
+            console.log(result);
         });
+    }
+
+    function submit() {
+        var student = {
+            password: document.getElementById("pwd").value,
+            name: document.getElementById("name").value,
+            testProperty: {id:document.getElementById("testProperty").value},
+        }
+        $.post(
+            "@Url.Action("SaveStudent","Home")",
+            student,
+            function (result) {
+                console.log(result);
+            }
+        )
     }
 </script>
 <script>
@@ -82,5 +95,17 @@
             xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlHttp.send(requestData);
         }
+    }
+
+    function getStudent() {
+        httpRequest({
+        method: "get",
+        url: "Home/GetStudent",//请求的url地址
+        data: {}
+        }, function (res) {
+            console.log(res);
+        }, function () {
+            console.log("请求失败");
+        });
     }
 </script>

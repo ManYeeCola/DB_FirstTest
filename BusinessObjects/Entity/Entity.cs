@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace BusinessObjects.Entity
@@ -9,15 +11,17 @@ namespace BusinessObjects.Entity
     public class Entity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int Id { get; set; }
     }
 
     [Owned]
-    public class KeyValue
+    public class KeyValue<T> where T:Enum
     {
-        public Enum Id { get; set; }
+        public T Id { get; set; }
         [NotMapped]
-        public string Name { get; set; }
+        public string Name { get { return Id.EnumMetadataDisplay(); } }
+
     }
 
     public static class EnumExtension

@@ -11,6 +11,7 @@ namespace BusinessObjects.Util
         public static string connectStr;
         public AppDbContext()
         {
+            System.Diagnostics.Debug.WriteLine("Test------------"+this);
         }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -40,7 +41,11 @@ namespace BusinessObjects.Util
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(20); 
+
+                entity.OwnsOne(
+                    e => e.Credit,
+                    p => p.Property(kv => kv.Id).HasColumnName("Credit"));
             });
 
             modelBuilder.Entity<Erollment>(entity =>
@@ -79,8 +84,10 @@ namespace BusinessObjects.Util
                     .HasMaxLength(20);
 
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
+                entity.OwnsOne(
+                    e => e.TestProperty,
+                    p => p.Property(kv => kv.Id).HasColumnName("TestPropertyId"));
             });
-
             OnModelCreatingPartial(modelBuilder);
         }
 

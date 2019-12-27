@@ -10,22 +10,11 @@ namespace BusinessObjects.Entity
         public DateTime RegisterDate { get; set; }
         public string Password { get; set; }
 
-        public TestStatus Status { get; set; }
-
-        public string StatusName { get { return Status.EnumMetadataDisplay(); } }
-
-        private KeyValue testProperty;
-        public KeyValue TestProperty { 
-            get { 
-                this.testProperty.Name= this.testProperty.Id.ToString();
-                return this.testProperty; 
-            }  
-            set { this.testProperty = value; } 
-        }
+        public KeyValue<TestStatus> TestProperty { get; set; }
 
         public Student()
         {
-            this.TestProperty = new KeyValue();
+            this.TestProperty = new KeyValue<TestStatus>();
         }
     }
 
