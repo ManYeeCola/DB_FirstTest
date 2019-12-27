@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <title></title>
+	<style>
+		.mui-sup{color: #ff0000;background-color: #ffffff;width: 10px;}
+		.mui-rep:after{content: '*';}
+		.mui-comments{color:#888888;font-size: 14px;}
+	</style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+	      <h1 class="mui-title" style="color: #0095ff;font-size: 20px;"><strong>非公12-26通用模板签到活动</strong></h1>
+	</header>
+	<div class="mui-content" id="commonQuestion">
+		
+	</div>
+	<footer class="mui-bar mui-bar-footer">
+		<div class="mui-text-center">
+			<button class="mui-btn mui-btn-primary mui-col-sm-8 mui-col-xs-8" onclick="GenerateDom()">提交</button>
+		</div>
+	</footer>
+</body>
+    <script src="js/mui.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+		function checkName(){
+			mui("#name").each(function() {
+			//若当前input为空，则alert提醒 
+				if(!this.value || this.value.trim() == "") {
+					mui.alert("名称无效");
+					check = false;
+					return false;
+				}
+			}); //校验通过，继续执行业务逻辑 
+			if(check){
+			    mui.alert('验证通过!')
+			}
+		}
+		
+		function GenerateDom(){
+			let input=0
+			let radio=1
+			let checkbox=2
+			var req,qtitle,questions,content;
+			let template=GetAptTemplate()
+			let commonq=GetCommonData()
+			var groups=[
+				{ID:0 ,Name:"通用",questions:[]},
+				{ID:1 ,Name:"早癌",questions:[]},
+				{ID:2 ,Name:"超声",questions:[]},
+				{ID:3 ,Name:"呼吸",questions:[]},
+				{ID:4 ,Name:"小肠镜",questions:[]},
+			]
+			groups.forEach(group=>{
+				group.questions=commonq.TempQuestionInfos.filter(question=>question.Group.ID==group.ID)
+				//group.questions.push.apply(template.TempQuestionInfos.filter(question=>question.Group.ID==group.ID))
+			})
+			groups[0].questions.forEach((question,index)=>{
+				content=""
+				req=question.Required?"mui-rep":"",
+				
+				qtitle=`<div>
+							<sup class="mui-sup `+req+` mui-badge"></sup>
+							<strong>`+index+1+`.`+question.Descrition+`</strong>
+							<span class="mui-comments">`+(question.Type==checkbox)?"[多选]":""+`</span>
+						</div>`
+				switch (question.Type){
+					case input:
+						content=(question.MaxLength<50)?
+							`<div class="mui-input-row">
+								<input type="text" class="mui-input-clear" maxlength="`+question.MaxLength+`">
+							</div>`:
+							`<div class="mui-input-row">
+								<textarea class="mui-input-clear" maxlength="`+question.MaxLength+`"></textarea>
+							</div>`
+						break;
+					case radio:
+						content+=quetion.TempQuOptionInfos.forEach(option=>{
+							return `<div class="mui-input-row mui-radio ">
+							  <label>`+option.Name+`</label>
+							  <input name="question_`+question.ID+`" value="`+option.ID+`" type="radio">
+							</div>`
+						})
+						break;
+					case checkbox:
+						content+=quetion.TempQuOptionInfos.forEach(option=>{
+							return `<div class="mui-input-row mui-checkbox ">
+							  <label>`+option.Name+`</label>
+							  <input name="question_`+question.ID+`" value="`+option.ID+`" type="checkbox">
+							</div>`
+						})
+						break;
+				}
+				
+				questions=`<div class="mui-card">
+								<div class="mui-card-header ">`
+									+qtitle+
+								`</div>
+								<div class="mui-card-content-inner ">`
+									+content+
+								`</div>
+							</div>`
+							console.log(questions)
+				document.getElementById("commonQuestion").appendChild(questions)
+			})
+		}
+		function GetAptTemplate(){
+			let atpTemplate={
+				Application:{},
+				Template:{},
+				Name:"",
+				CreatedDate:"",
+				Creator:{},
+				QrStartDate:"",
+				QrEndDate:"",
+				CanEdit:false
+			}
+			atpTemplate.Template=GetData()
+			return atpTemplate
+		}
+		function GetCommonData(){
+			let common={
+				"Name":"通用模板",
+				"CampaignType":{
+					"Description":"",
+					"Department":{"ID":0},
+					"Group":{"DepartmentID":0,"GroupID":0},
+					"SumType":0,
+					"Coefficient1":0.0,
+					"Coefficient2":0.0,
+					"ReportSeq":0,"ID":0
+					},
+				"Status":{"ID":10,"Name":"已审批"},
+				"Creator":{"Name":"管理人员","Role":{"ID":0},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":1},
+				"CreatedDate":"2019-12-19T13:19:45.357",
+				"UpdatedDate":"0001-01-01T00:00:00",
+				"TempQuestionInfos":[
+					{
+						"TemplateId":1,"Sequence":1,"Descrition":"医生姓名","Group":{"ID":0},"Type":0,"Required":true,"MaxLength":10,
+						"TempQuOptionInfos":[],"ID":1
+					},
+					{
+						"TemplateId":1,"Sequence":1,"Descrition":"您在日常工作中，是否经常使用LCI做筛查？","Group":{"ID":1},"Type":1,"Required":true,"MaxLength":0,
+						"TempQuOptionInfos":[
+							{"QuestionId":7,"Sequence":1,"Descrition":"经常使用，50%以上","ID":12},
+							{"QuestionId":7,"Sequence":2,"Descrition":"偶尔使用，20%-50%","ID":13},
+							{"QuestionId":7,"Sequence":3,"Descrition":"很少使用，20%以下","ID":14},
+							{"QuestionId":7,"Sequence":4,"Descrition":"从未使用","ID":15}
+						],
+						"ID":7
+					},
+					{"TemplateId":1,"Sequence":1,"Descrition":"远距离特殊光观察技术（如富士LCI)对黏膜色差的放大，使其可以提升气道内病变的检出，您认为对临床工作有帮助吗？","Group":{"ID":2},"Type":1,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":8,"Sequence":1,"Descrition":"很有帮助，并在从事相关的研究","ID":16},{"QuestionId":8,"Sequence":2,"Descrition":"偶尔使用，希望了解更多现有文献情况","ID":17},{"QuestionId":8,"Sequence":3,"Descrition":"很少使用，不太愿意了解","ID":18},{"QuestionId":8,"Sequence":4,"Descrition":"从未使用，比较感兴趣","ID":19}],"ID":8},{"TemplateId":1,"Sequence":1,"Descrition":"您日常工作中使用的超声内镜设备是？","Group":{"ID":3},"Type":1,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":9,"Sequence":1,"Descrition":"超声小探头，主要探查SMT","ID":20},{"QuestionId":9,"Sequence":2,"Descrition":"超声内窥镜EUS","ID":21},{"QuestionId":9,"Sequence":3,"Descrition":"大超小超都用","ID":22}],"ID":9},{"TemplateId":1,"Sequence":1,"Descrition":"您所在单位，是否开展小肠镜的检查/治疗","Group":{"ID":4},"Type":1,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":10,"Sequence":1,"Descrition":"常规开展","ID":23},{"QuestionId":10,"Sequence":2,"Descrition":"较少开展","ID":24},{"QuestionId":10,"Sequence":3,"Descrition":"没有开展","ID":25}],"ID":10},{"TemplateId":1,"Sequence":2,"Descrition":"科室","Group":{"ID":0},"Type":1,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":2,"Sequence":1,"Descrition":"化科","ID":1},{"QuestionId":2,"Sequence":2,"Descrition":"内镜中心","ID":2},{"QuestionId":2,"Sequence":3,"Descrition":"其他","ID":3}],"ID":2},{"TemplateId":1,"Sequence":3,"Descrition":"医生职称","Group":{"ID":0},"Type":1,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":3,"Sequence":1,"Descrition":"主任医师","ID":4},{"QuestionId":3,"Sequence":2,"Descrition":"副主任医师","ID":5},{"QuestionId":3,"Sequence":3,"Descrition":"主治医师","ID":6},{"QuestionId":3,"Sequence":4,"Descrition":"住院医师","ID":7}],"ID":3},{"TemplateId":1,"Sequence":4,"Descrition":"医院名称","Group":{"ID":0},"Type":0,"Required":true,"MaxLength":50,"TempQuOptionInfos":[],"ID":4},{"TemplateId":1,"Sequence":5,"Descrition":"联系电话","Group":{"ID":0},"Type":0,"Required":true,"MaxLength":11,"TempQuOptionInfos":[],"ID":5},{"TemplateId":1,"Sequence":6,"Descrition":"主要从事研究方向","Group":{"ID":0},"Type":2,"Required":true,"MaxLength":0,"TempQuOptionInfos":[{"QuestionId":6,"Sequence":1,"Descrition":"早癌","ID":8},{"QuestionId":6,"Sequence":2,"Descrition":"呼吸","ID":9},{"QuestionId":6,"Sequence":3,"Descrition":"超声","ID":10},{"QuestionId":6,"Sequence":4,"Descrition":"小肠镜","ID":11}
+				],
+				"ID":6}],"CanRecall":false,"CanCopy":false,"ID":1,
+			}
+			return common
+		}
+		function GetData(){
+			let template={
+				"Name":"test",
+				"CampaignType":{"Description":"NTC (全国培训活动)","Department":{"ID":0},"Group":{"DepartmentID":0,"GroupID":0},"SumType":0,"Coefficient1":0.0,"Coefficient2":0.0,"ReportSeq":0,"ID":9},
+				"Status":{"ID":10,"Name":"已审批"},
+				"Creator":{"Name":"白仲义","Role":{"ID":0},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":63},
+				"CreatedDate":"2019-12-20T14:00:57.293",
+				"UpdatedDate":"2019-12-23T10:29:55.523",
+				"TempQuestionInfos":[
+					{
+						"TemplateId":4,"Sequence":2,"Descrition":"测试位置","Group":{"ID":1},"Type":0,"Required":true,"MaxLength":45,
+						"TempQuOptionInfos":[],"ID":24,
+					},
+					{
+						"TemplateId":4,"Sequence":2,"Descrition":"测试邮件","Group":{"ID":3},"Type":0,"Required":true,"MaxLength":45,
+						"TempQuOptionInfos":[],"ID":25,
+					},
+					{
+						"TemplateId":4,"Sequence":3,"Descrition":"Test问题","Group":{"ID":1},"Type":2,"Required":true,"MaxLength":0,
+						"TempQuOptionInfos":[
+							{"QuestionId":19,"Sequence":1,"Descrition":"测试A","ID":36},
+							{"QuestionId":19,"Sequence":2,"Descrition":"测试B","ID":37},
+						],
+						"ID":19,
+					},
+					{
+						"TemplateId":4,"Sequence":3,"Descrition":"Test","Group":{"ID":3},"Type":0,"Required":true,"MaxLength":50,
+						"TempQuOptionInfos":[],"ID":21,
+					},
+					{
+						"TemplateId":4,"Sequence":7,"Descrition":"测试选择","Group":{"ID":0},"Type":2,"Required":true,"MaxLength":0,
+						"TempQuOptionInfos":[
+							{"QuestionId":20,"Sequence":2,"Descrition":"选项B","ID":38},
+							{"QuestionId":20,"Sequence":3,"Descrition":"选项C","ID":39},
+						],
+						"ID":20},
+				],
+				"TempHistories":[{"TempID":4,"Operator":{"Name":"部门长S","Role":{"ID":8,"Name":"部门长"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":6},"Action":3,"Comments":"部门长审批","TransDate":"2019-12-23T10:31:58.86","CommentsDesc":"2019-12-23 10:31 部门长 - 部门长S: 通过 - 部门长审批","ID":29},{"TempID":4,"Operator":{"Name":"大区经理S","Role":{"ID":4,"Name":"大区经理"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":5},"Action":3,"Comments":"部门长通过","TransDate":"2019-12-23T10:30:48.377","CommentsDesc":"2019-12-23 10:30 大区经理 - 大区经理S: 通过 - 部门长通过","ID":28},{"TempID":4,"Operator":{"Name":"大区经理S","Role":{"ID":4,"Name":"大区经理"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":5},"Action":3,"Comments":"","TransDate":"2019-12-23T10:30:19.833","CommentsDesc":"2019-12-23 10:30 大区经理 - 大区经理S: 通过","ID":27},{"TempID":4,"Operator":{"Name":"白仲义","Role":{"ID":2,"Name":"申请者"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":63},"Action":1,"Comments":"","TransDate":"2019-12-23T10:29:55.537","CommentsDesc":"2019-12-23 10:29 申请者 - 白仲义: 提交","ID":26},{"TempID":4,"Operator":{"Name":"部门长S","Role":{"ID":8,"Name":"部门长"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":6},"Action":4,"Comments":"部门长退回","TransDate":"2019-12-23T10:29:22.16","CommentsDesc":"2019-12-23 10:29 部门长 - 部门长S: 退回 - 部门长退回","ID":25},{"TempID":4,"Operator":{"Name":"大区经理S","Role":{"ID":4,"Name":"大区经理"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":5},"Action":3,"Comments":"通过审批测试","TransDate":"2019-12-23T10:28:39.74","CommentsDesc":"2019-12-23 10:28 大区经理 - 大区经理S: 通过 - 通过审批测试","ID":24},{"TempID":4,"Operator":{"Name":"白仲义","Role":{"ID":2,"Name":"申请者"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":63},"Action":1,"Comments":"","TransDate":"2019-12-23T10:27:56.407","CommentsDesc":"2019-12-23 10:27 申请者 - 白仲义: 提交","ID":23},{"TempID":4,"Operator":{"Name":"大区经理S","Role":{"ID":4,"Name":"大区经理"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":5},"Action":4,"Comments":"测试退回邮件","TransDate":"2019-12-23T10:27:21.63","CommentsDesc":"2019-12-23 10:27 大区经理 - 大区经理S: 退回 - 测试退回邮件","ID":22},{"TempID":4,"Operator":{"Name":"白仲义","Role":{"ID":2,"Name":"申请者"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":63},"Action":1,"Comments":"","TransDate":"2019-12-23T10:26:39.977","CommentsDesc":"2019-12-23 10:26 申请者 - 白仲义: 提交","ID":21},{"TempID":4,"Operator":{"Name":"大区经理S","Role":{"ID":4,"Name":"大区经理"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":5},"Action":4,"Comments":"测试邮件","TransDate":"2019-12-23T09:55:26.083","CommentsDesc":"2019-12-23 09:55 大区经理 - 大区经理S: 退回 - 测试邮件","ID":20},{"TempID":4,"Operator":{"Name":"白仲义","Role":{"ID":2,"Name":"申请者"},"Department":{"ID":0},"Department2":{"ID":0},"IsActive":false,"LastLoginDate":"0001-01-01T00:00:00","CreatedDate":"0001-01-01T00:00:00","IsUpdatePassword":false,"GroupDesc":"","IsActiveDesc":"停用","ID":63},"Action":1,"Comments":"","TransDate":"2019-12-23T09:52:57.577","CommentsDesc":"2019-12-23 09:52 申请者 - 白仲义: 提交","ID":19}],
+				"VerifyComments":"2019-12-23 10:31 部门长 - 部门长S: 通过 - 部门长审批\r\n2019-12-23 10:30 大区经理 - 大区经理S: 通过 - 部门长通过\r\n2019-12-23 10:30 大区经理 - 大区经理S: 通过\r\n2019-12-23 10:29 申请者 - 白仲义: 提交\r\n2019-12-23 10:29 部门长 - 部门长S: 退回 - 部门长退回\r\n2019-12-23 10:28 大区经理 - 大区经理S: 通过 - 通过审批测试\r\n2019-12-23 10:27 申请者 - 白仲义: 提交\r\n2019-12-23 10:27 大区经理 - 大区经理S: 退回 - 测试退回邮件\r\n2019-12-23 10:26 申请者 - 白仲义: 提交\r\n2019-12-23 09:55 大区经理 - 大区经理S: 退回 - 测试邮件\r\n2019-12-23 09:52 申请者 - 白仲义: 提交\r\n",
+				"CanRecall":true,
+				"CanCopy":true,
+				"ID":4,
+			}
+			return template
+		}
+    </script>
+</html>
