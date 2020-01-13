@@ -59,11 +59,11 @@ namespace DB_FirstTest.Controllers
             }
         }
 
-        public JsonResult SaveStudent(Student student)
+        public JsonResult SaveStudent(Student student,Course course)
         {
             try
             {
-                return Json(_studentService.SaveStudent(student));
+                return Json(_studentService.SaveStudent(student, course));
             }catch(Exception e)
             {
                 return Json(e.Message);
