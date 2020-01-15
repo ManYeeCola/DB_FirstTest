@@ -1,22 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessObjects.Entity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BusinessObjects.Util;
 using BusinessObjects.Dao;
 using BusinessObjects.Services;
-using DB_FirstTest.Models;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using BusinessObjects.Aspect;
 
 namespace DB_FirstTest
 {
@@ -32,17 +25,16 @@ namespace DB_FirstTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AppDbContext.connectStr = Configuration.GetConnectionString("University");
+            services.AddDbContext<AppDbContext>(
+                options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("University")),
+                ServiceLifetime.Scoped
+            ) ;
             services.AddControllersWithViews().AddControllersAsServices();
             services.AddControllersWithViews();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //模块化注入
-            //builder.RegisterModule<AutoFacModule>();
-            //注入entity层的repository类builder.RegisterType(typeof(TUserRepository)).As(typeof(IUserRepository)).InstancePerDependency();
-            builder.RegisterType(typeof(AppDbContext)).As(typeof(AppDbContext)).InstancePerDependency();
-            //批量注入Repository的类
             builder.RegisterAssemblyTypes(typeof(CourseDao).Assembly)
                    .Where(t => t.Name.EndsWith("Dao"))
                    .AsImplementedInterfaces();
@@ -52,7 +44,7 @@ namespace DB_FirstTest
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//01-15 add ", ILoggerFactory loggerFactory"
         {
             if (env.IsDevelopment())
             {
@@ -77,6 +69,7 @@ namespace DB_FirstTest
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            loggerFactory.AddProvider(new BOLoggerProvider());//01-15 add
         }
     }
 }

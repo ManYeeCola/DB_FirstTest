@@ -51,7 +51,7 @@ namespace DB_FirstTest.Controllers
         {
             try
             {
-                return Json(_studentService.GetStudent());
+                return Json(_studentService.GetById(1));
             }
             catch(Exception e)
             {

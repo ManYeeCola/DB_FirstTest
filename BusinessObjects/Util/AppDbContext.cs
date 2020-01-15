@@ -8,30 +8,15 @@ namespace BusinessObjects.Util
 {
     public partial class AppDbContext : DbContext
     {
-        public static string connectStr;
-        public AppDbContext()
-        {
-            System.Diagnostics.Debug.WriteLine("Test------------"+this);
-        }
+        public AppDbContext(){}
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options){}
 
         public virtual DbSet<Course> Course { get; set; }
         public virtual DbSet<Erollment> Erollment { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Student> Student { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-              #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-              optionsBuilder.UseSqlServer(connectStr);
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

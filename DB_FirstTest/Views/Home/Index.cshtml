@@ -19,14 +19,15 @@
     }
 
     function submit() {
-        var student = {
+        let student = {
             password: document.getElementById("pwd").value,
             name: document.getElementById("name").value,
             testProperty: {id:document.getElementById("testProperty").value},
         }
+        let course = { Id: 1, Name: "测试课程", Credit: {Id:1}}
         $.post(
             "@Url.Action("SaveStudent","Home")",
-            student,
+            {student:student,course:course},
             function (result) {
                 console.log(result);
             }

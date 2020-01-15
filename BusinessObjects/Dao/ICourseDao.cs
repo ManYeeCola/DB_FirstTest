@@ -13,11 +13,13 @@ namespace BusinessObjects.Dao
     }
     public class CourseDao : BaseDao<Course>, ICourseDao
     {
-        public CourseDao(AppDbContext db) : base(db) { }
+        public CourseDao(AppDbContext db) : base(db){}
         public int SaveCourse(Course course)
         {
-            db.Course.Add(course);
-            db.SaveChanges();
+            _db.Course.Add(course);
+            Course coursetest=null;
+            int test= coursetest.Id;
+            _db.SaveChanges();
             return course.Id;
         }
     }

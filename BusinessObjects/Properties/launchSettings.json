@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BusinessObjects": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

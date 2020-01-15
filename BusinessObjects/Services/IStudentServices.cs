@@ -7,31 +7,34 @@ using System.Text;
 
 namespace BusinessObjects.Services
 {
-    public interface IStudentServices
+    public interface IStudentServices: IServices<Student>
     {
         List<Student> GetStudent();
         int SaveStudent(Student student, Course course);
     }
 
-    public class StudentServices : IStudentServices
+    public class StudentServices : BaseServices<Student>,IStudentServices
     {
-        private readonly IStudentDao studentDao;
-        private readonly ICourseDao courseDao;
-        public StudentServices(IStudentDao _studentDao, ICourseDao _courseDao)
+        private readonly IStudentDao _studentDao;
+        private readonly ICourseDao _courseDao;
+        public StudentServices(AppDbContext db, IStudentDao studentDao, ICourseDao courseDao) : base(db, studentDao)
         {
-            studentDao = _studentDao;
-            courseDao = _courseDao;
+            _studentDao = studentDao;
+            _courseDao = courseDao;
         }
+
         public List<Student> GetStudent()
         {
-            return studentDao.GetStudent();
+            return _studentDao.GetStudent();
         }
 
         public int SaveStudent(Student student,Course course)
         {
+            this.OpenProxy();
             student.RegisterDate = DateTime.Now;
-            int resultA =studentDao.SaveStudent(student);
-            int resultB = courseDao.SaveCourse(course);
+            int resultA =_studentDao.SaveStudent(student);
+            int resultB = _courseDao.SaveCourse(course);
+            this.SaveChanges();
             return resultA;
         }
     }
