@@ -1,5 +1,3 @@
-using System;
-
 namespace DB_FirstTest.Models
 {
     public class ErrorViewModel

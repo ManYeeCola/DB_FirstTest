@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using BusinessObjects.Entity;
+﻿using BusinessObjects.Entity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BusinessObjects.Util
 {

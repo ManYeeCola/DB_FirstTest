@@ -3,11 +3,10 @@ using BusinessObjects.Entity;
 using BusinessObjects.Util;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BusinessObjects.Services
 {
-    public interface IStudentServices: IServices<Student>
+    public interface IStudentServices: IServices<Student>,IDependency
     {
         List<Student> GetStudent();
         int SaveStudent(Student student, Course course);

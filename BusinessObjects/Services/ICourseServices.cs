@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BusinessObjects.Util;
 
 namespace BusinessObjects.Services
 {
-    public interface ICourseServices
+    public interface ICourseServices : IDependency
     {
     }
 

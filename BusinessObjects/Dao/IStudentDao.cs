@@ -1,17 +1,11 @@
-﻿using BusinessObjects.Dao;
-using BusinessObjects.Entity;
+﻿using BusinessObjects.Entity;
 using BusinessObjects.Util;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace BusinessObjects.Dao
 {
-    public interface IStudentDao:IDao<Student>
+    public interface IStudentDao:IDao<Student>,IDependency
     {
         List<Student> GetStudent();
         int SaveStudent(Student student);
