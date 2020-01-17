@@ -1,4 +1,6 @@
-﻿using BusinessObjects.Dao;
+﻿using Autofac.Extras.DynamicProxy;
+using BusinessObjects.Aspect;
+using BusinessObjects.Dao;
 using BusinessObjects.Entity;
 using BusinessObjects.Util;
 using System;
@@ -6,12 +8,13 @@ using System.Collections.Generic;
 
 namespace BusinessObjects.Services
 {
-    public interface IStudentServices: IServices<Student>,IDependency
+    public interface IStudentServices: IServices<Student>
     {
         List<Student> GetStudent();
         int SaveStudent(Student student, Course course);
     }
 
+    [Intercept(typeof(Logger))]
     public class StudentServices : BaseServices<Student>,IStudentServices
     {
         private readonly IStudentDao _studentDao;

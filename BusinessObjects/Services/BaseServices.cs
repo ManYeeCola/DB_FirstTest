@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Services
 {
-    public interface IServices<T>
+    public interface IServices<T> : IDependency
     {
         /// <summary>
         /// 添加

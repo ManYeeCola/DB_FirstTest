@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BusinessObjects.Dao
 {
-    public interface IStudentDao:IDao<Student>,IDependency
+    public interface IStudentDao:IDao<Student>
     {
         List<Student> GetStudent();
         int SaveStudent(Student student);

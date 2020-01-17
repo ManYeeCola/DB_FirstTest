@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace BusinessObjects.Dao
 {
-    public interface IDao<T> where T : class
+    public interface IDao<T> : IDependency where T : class
     {
         /// <summary>
         /// 添加
@@ -70,8 +70,6 @@ namespace BusinessObjects.Dao
         /// <returns></returns>
         bool IsHasValue(Expression<Func<T, bool>> where);
     }
-
-
 
     public abstract class BaseDao<T>:IDao<T> where T:class
     {
