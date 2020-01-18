@@ -1,10 +1,12 @@
 ﻿using Castle.DynamicProxy;
+using System;
 using System.IO;
 using System.Linq;
 
 namespace BusinessObjects.Aspect
 {
-    public class Logger : Castle.DynamicProxy.IInterceptor
+    [AttributeUsage(AttributeTargets.Method, Inherited = true)]
+    public class Logger : Attribute,Castle.DynamicProxy.IInterceptor
     {
         TextWriter _output;
         public Logger(TextWriter output)

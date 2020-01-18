@@ -39,13 +39,6 @@ namespace DB_FirstTest
             //    .Named<IInterceptor>("_logger");
             builder.Register(l => new Logger(System.Console.Out));//注册拦截器 类型注册
 
-            //Type baseType = typeof(IDependency);
-            //Type basetype = typeof(IDependency);  //无效 属于手动使用Autofac获取
-            //builder.RegisterAssemblyTypes(System.Reflection.Assembly.GetExecutingAssembly())
-            //    .Where(t => baseType.IsAssignableFrom(t) && t.IsClass)
-            //    .AsImplementedInterfaces()
-            //    .InstancePerLifetimeScope();
-
             builder.RegisterAssemblyTypes(typeof(BusinessObjects.Dao.StudentDao).Assembly)
                    .Where(t => t.Name.EndsWith("Dao"))
                    .AsImplementedInterfaces()
