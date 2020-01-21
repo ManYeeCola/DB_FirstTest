@@ -2,6 +2,7 @@
 using BusinessObjects.Aspect;
 using BusinessObjects.Dao;
 using BusinessObjects.Entity;
+using BusinessObjects.Interceptor;
 using BusinessObjects.Util;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace BusinessObjects.Services
         int SaveStudent(Student student, Course course);
     }
 
-    [Intercept(typeof(Logger))]
+    [Intercept(typeof(TransactionInterceptor))]
     public class StudentServices : BaseServices<Student>,IStudentServices
     {
         private readonly IStudentDao _studentDao;
@@ -24,12 +25,12 @@ namespace BusinessObjects.Services
             _studentDao = studentDao;
             _courseDao = courseDao;
         }
-
+        [Transaction]
         public List<Student> GetStudent()
         {
             return _studentDao.GetStudent();
         }
-
+        [Transaction]
         public int SaveStudent(Student student,Course course)
         {
             this.OpenProxy();

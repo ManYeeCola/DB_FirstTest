@@ -3,13 +3,12 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace BusinessObjects.Aspect
+namespace BusinessObjects.Interceptor
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = true)]
-    public class Logger : Attribute,Castle.DynamicProxy.IInterceptor
+    public class LoggerInterceptor : Castle.DynamicProxy.IInterceptor
     {
         TextWriter _output;
-        public Logger(TextWriter output)
+        public LoggerInterceptor(TextWriter output)
         {
             _output = output;
         }

@@ -1,6 +1,6 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
-using BusinessObjects.Aspect;
+using BusinessObjects.Interceptor;
 using BusinessObjects.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace DB_FirstTest
 {
@@ -37,7 +35,8 @@ namespace DB_FirstTest
         {
             //builder.Register(l => new Logger(System.Console.Out))//×¢²áÀ¹½ØÆ÷ ÃüÃû×¢²á
             //    .Named<IInterceptor>("_logger");
-            builder.Register(l => new Logger(System.Console.Out));//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
+            builder.Register(l => new LoggerInterceptor(System.Console.Out));//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
+            builder.Register(l => new TransactionInterceptor());//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
 
             builder.RegisterAssemblyTypes(typeof(BusinessObjects.Dao.StudentDao).Assembly)
                    .Where(t => t.Name.EndsWith("Dao"))
