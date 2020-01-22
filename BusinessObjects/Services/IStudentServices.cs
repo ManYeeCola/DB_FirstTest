@@ -33,11 +33,9 @@ namespace BusinessObjects.Services
         [Transaction]
         public int SaveStudent(Student student,Course course)
         {
-            this.OpenProxy();
             student.RegisterDate = DateTime.Now;
             int resultA =_studentDao.SaveStudent(student);
             int resultB = _courseDao.SaveCourse(course);
-            this.SaveChanges();
             return resultA;
         }
     }

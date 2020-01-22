@@ -92,7 +92,7 @@ namespace BusinessObjects.Services
 
 
 
-    public abstract class BaseServices<T> :IServices<T> where T:class
+    public class BaseServices<T> :IServices<T> where T:class
     {
         protected AppDbContext _db;
         private IDao<T> _baseDao;

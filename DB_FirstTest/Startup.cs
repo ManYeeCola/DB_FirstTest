@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using BusinessObjects.Aspect;
 using BusinessObjects.Interceptor;
 using BusinessObjects.Util;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 namespace DB_FirstTest
 {
@@ -35,19 +37,24 @@ namespace DB_FirstTest
         {
             //builder.Register(l => new Logger(System.Console.Out))//×¢²áÀ¹½ØÆ÷ ÃüÃû×¢²á
             //    .Named<IInterceptor>("_logger");
-            builder.Register(l => new LoggerInterceptor(System.Console.Out));//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
-            builder.Register(l => new TransactionInterceptor());//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
+            builder.RegisterType<LoggerInterceptor>().WithParameter("output", System.Console.Out);//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á  Ôö¼Ó²ÎÊı
+            builder.RegisterType<TransactionInterceptor>();//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
 
-            builder.RegisterAssemblyTypes(typeof(BusinessObjects.Dao.StudentDao).Assembly)
-                   .Where(t => t.Name.EndsWith("Dao"))
+            builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
+                   .Where(type => typeof(IDependency).IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract)
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope()
                    .EnableInterfaceInterceptors();
-            builder.RegisterAssemblyTypes(typeof(BusinessObjects.Services.StudentServices).Assembly)
-                   .Where(t => t.Name.EndsWith("Services"))
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope()
-                   .EnableInterfaceInterceptors();
+            //builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
+            //       .Where(t => t.Name.EndsWith("Dao"))
+            //       .AsImplementedInterfaces()
+            //       .InstancePerLifetimeScope()
+            //       .EnableInterfaceInterceptors();
+            //builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
+            //       .Where(t => t.Name.EndsWith("Services"))
+            //       .AsImplementedInterfaces()
+            //       .InstancePerLifetimeScope()
+            //       .EnableInterfaceInterceptors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
