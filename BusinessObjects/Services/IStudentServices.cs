@@ -14,7 +14,6 @@ namespace BusinessObjects.Services
         List<Student> GetStudent();
         int SaveStudent(Student student, Course course);
     }
-
     [Intercept(typeof(TransactionInterceptor))]
     public class StudentServices : BaseServices<Student>,IStudentServices
     {
@@ -25,7 +24,6 @@ namespace BusinessObjects.Services
             _studentDao = studentDao;
             _courseDao = courseDao;
         }
-        [Transaction]
         public List<Student> GetStudent()
         {
             return _studentDao.GetStudent();

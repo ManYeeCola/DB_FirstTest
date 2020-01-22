@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using BusinessObjects.Aspect;
 using BusinessObjects.Interceptor;
 using BusinessObjects.Util;
+using DB_FirstTest.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,6 @@ namespace DB_FirstTest
         {
             //builder.Register(l => new Logger(System.Console.Out))//×¢²áÀ¹½ØÆ÷ ÃüÃû×¢²á
             //    .Named<IInterceptor>("_logger");
-            builder.RegisterType<LoggerInterceptor>().WithParameter("output", System.Console.Out);//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á  Ôö¼Ó²ÎÊı
             builder.RegisterType<TransactionInterceptor>();//×¢²áÀ¹½ØÆ÷ ÀàĞÍ×¢²á
 
             builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
@@ -45,16 +45,6 @@ namespace DB_FirstTest
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope()
                    .EnableInterfaceInterceptors();
-            //builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
-            //       .Where(t => t.Name.EndsWith("Dao"))
-            //       .AsImplementedInterfaces()
-            //       .InstancePerLifetimeScope()
-            //       .EnableInterfaceInterceptors();
-            //builder.RegisterAssemblyTypes(typeof(BusinessObjects.Util.IDependency).Assembly)
-            //       .Where(t => t.Name.EndsWith("Services"))
-            //       .AsImplementedInterfaces()
-            //       .InstancePerLifetimeScope()
-            //       .EnableInterfaceInterceptors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,15 +3,12 @@ using BusinessObjects.Util;
 using Castle.DynamicProxy;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Transactions;
 
 namespace BusinessObjects.Interceptor
 {
+    [LoggingAspect(AspectPriority = 1)]
     public class TransactionInterceptor:Castle.DynamicProxy.IInterceptor
     {
         private AppDbContext _db;
@@ -36,22 +33,22 @@ namespace BusinessObjects.Interceptor
                  .FirstOrDefault();
                 if (null != transaction && transaction.Flag())
                 {
-                    try
+                    using (var tran = this.BeginTransaction())
                     {
-                        using (var tran = this.BeginTransaction())
+                        try
                         {
-                            invocation.Proceed();
-                            tran.Commit();
+                                invocation.Proceed();
+                                tran.Commit();
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.RollBack();
-                        throw ex;
-                    }
-                    finally
-                    {
-                        //Do somthing……
+                        catch (Exception ex)
+                        {
+                            this.RollBack();
+                            throw ex;
+                        }
+                        finally
+                        {
+                            //Do somthing……
+                        }
                     }
                 }
                 else
