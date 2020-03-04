@@ -6,6 +6,17 @@
     <link href="css/mui.min.css" rel="stylesheet"/>
     <title></title>
 	<style>
+        .mui-card, .mui-card-content-inner {overflow: initial;}
+        .mui-sup {color: #ff0000;background-color: #ffffff;width: 10px;}
+        .mui-rep:after { content: '*';}
+        .mui-comments {color: #888888;font-size: 14px;}
+        .question_input {font-size: 14px;}
+        .datalist_div {height: 200px;display: none;background-color: #FFFFFF;border: 1px solid #dddddd;border-top: 0;border-radius: 0 0 5px 5px;box-shadow: 0 1px 2px rgba(0,0,0,.3);}
+        .datalist_ul {list-style: none;padding: 0px;margin: 0px;}
+        .datalist_li {font-size: 14px;padding: 5px 10px;width:100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+        .mui-table-view-chevron .mui-table-view-cell{padding-right:10px;}
+        .datalist_li:after{left:0;}
+        .end-content {display: flex;align-items: center;justify-content: flex-start;flex-direction: column;}
 		.mui-sup{color: #ff0000;background-color: #ffffff;width: 10px;}
 		.mui-rep:after{content: '*';}
 		.mui-comments{color:#888888;font-size: 14px;}
@@ -16,7 +27,70 @@
 	      <h1 class="mui-title" style="color: #0095ff;font-size: 20px;"><strong>非公12-28通用模板签到活动</strong></h1>
 	</header>
 	<div class="mui-content" id="commonQuestion">
-
+		<div class="mui-card">
+			<div class="mui-card-header ">
+				<div>
+					<sup class="mui-sup mui-rep mui-badge"></sup>
+					<strong id="question_label_" class="question_label">7.所属医院</strong>
+					<span class="mui-comments"></span>
+				</div>
+			</div>
+			<div class="mui-card-content-inner ">
+				<div class="mui-input-row">
+					<input type="text" class="mui-input-clear question_input" id="question_" maxlength="10" value="新增">
+				</div>	
+				请在下方输入新医院名称：
+				<div class="mui-input-row">
+					<input type="text" class="mui-input-clear question_input" id="question_" maxlength="10" value="">
+				</div>	
+				<div class="datalist_div mui-content mui-scroll-wrapper" id='datalist_div_' style="top: 55px;width: 92.5%;left: 15px;">
+					<div class="mui-scroll">
+					   <ul class='datalist_ul mui-table-view mui-table-view-chevron' id='datalist_ul_'>
+						<li class="datalist_li mui-table-view-cell" data-obj="" data-value="" data-hospital="" >上海市交通大学附属医院</li>
+						<li class="datalist_li mui-table-view-cell" data-obj="" data-value="" data-hospital="" >上海仁爱医院</li>
+						<li class="datalist_li mui-table-view-cell" data-obj="" data-value="" data-hospital="" >上海交通大学附属瑞金医院</li>
+						<li class="datalist_li mui-table-view-cell" data-obj="" data-value="" data-hospital="" >上海中医药大学附属龙华医院</li>
+						<li class="datalist_li mui-table-view-cell" data-obj="" data-value="" data-hospital="" >没有找到？点击新增</li>
+					   </ul>
+					</div>
+				</div> 
+			</div>
+		</div>
+		<div class="mui-card">
+			<div class="mui-card-header ">
+				<div>
+					<sup class="mui-sup mui-rep mui-badge"></sup>
+					<strong id="question_label_" class="question_label">8.主要从事的研究方向</strong>
+					<span class="mui-comments"></span>
+				</div>
+			</div>
+			<div class="mui-card-content-inner ">
+				<div class="mui-input-row">
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>早癌</label>
+						<input name="question_" value=""  class="" type="checkbox">
+					  </div>
+				</div>	
+				<div class="mui-input-row">
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>呼吸</label>
+						<input name="question_" value=""  class="" type="checkbox">
+					  </div>
+				</div>	
+				<div class="mui-input-row">
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>超声</label>
+						<input name="question_" value=""  class="" type="checkbox">
+					  </div>
+				</div>	
+				<div class="mui-input-row">
+					<div class="mui-input-row mui-checkbox mui-left">
+						<label>小肠镜</label>
+						<input name="question_" value=""  class="" type="checkbox">
+					  </div>
+				</div>	
+			</div>
+		</div>
 	</div>
 	<footer class="mui-bar mui-bar-footer">
 		<div class="mui-text-center">
@@ -29,7 +103,7 @@
 		//mui.init();
 		var atpTemplate
 		window.onload=(function(){
-			GetAptTemplate()
+			//GetAptTemplate()
 		})
 		
 		function GenerateDom(){
