@@ -13,8 +13,6 @@ namespace BusinessObjects.Dao
         public int SaveCourse(Course course)
         {
             _db.Course.Add(course);
-            Course coursetest=null;
-            int test= coursetest.Id;
             _db.SaveChanges();
             return course.Id;
         }
