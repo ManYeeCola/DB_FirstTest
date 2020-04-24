@@ -8,7 +8,8 @@
         <input type="text" autocomplete="no" id="pwd" />
         <select asp-items="@Html.GetEnumSelectList(typeof(BusinessObjects.Entity.TestStatus))" id="testProperty"></select>
         <button onclick="submit()">submit</button>
-</div>
+    </div>
+    <div><button onclick="goTo()">付款</button></div>
 </div>
 <script src="~/js/jquery-1.11.0.js"></script>
 <script>
@@ -28,6 +29,15 @@
         $.post(
             "@Url.Action("SaveStudent","Home")",
             {student:student,course:course},
+            function (result) {
+                console.log(result);
+            }
+        )
+    }
+    function goTo() {
+        $.get(
+            "@Url.Action("ToPay","Home")",
+            {},
             function (result) {
                 console.log(result);
             }

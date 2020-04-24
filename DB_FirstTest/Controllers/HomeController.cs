@@ -1,4 +1,6 @@
-﻿using BusinessObjects.Dao;
+﻿using Alipay.EasySDK.Factory;
+using Alipay.EasySDK.Payment.Common.Models;
+using BusinessObjects.Dao;
 using BusinessObjects.Entity;
 using BusinessObjects.Services;
 using DB_FirstTest.Models;
@@ -60,6 +62,30 @@ namespace DB_FirstTest.Controllers
             }catch(Exception e)
             {
                 return Json(e.Message);
+            }
+        }
+
+        public ActionResult ToPay()
+        {
+            try
+            {
+                // 2. 发起API调用（以支付能力下的统一收单交易创建接口为例）
+                AlipayTradeCreateResponse response = Factory.Payment.Common().Create("Apple iPhone11 128G", "2234567890", "5799.00", "2088002656718920");
+                // 3. 处理响应或异常
+                if ("10000".Equals(response.Code))
+                {
+                    Debug.WriteLine("调用成功");
+                }
+                else
+                {
+                    Debug.WriteLine("调用失败，原因：" + response.Msg + "，" + response.SubMsg);
+                }
+                return View("Home");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("调用遭遇异常，原因：" + ex.Message);
+                return View("Home");
             }
         }
     }

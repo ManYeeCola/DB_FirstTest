@@ -102,7 +102,6 @@ namespace BusinessObjects.Services
         {
             _db = db;
             _baseDao = baseDao;
-            Debug.WriteLine("Services--" + _db.ContextId);
         }
 
         public void Add(T entity)

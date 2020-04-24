@@ -78,7 +78,6 @@ namespace BusinessObjects.Dao
         public BaseDao(AppDbContext db)
         {
             _db = db;
-            Debug.WriteLine("Dao--" + _db.ContextId);
         }
 
         public virtual void Add(T entity)
